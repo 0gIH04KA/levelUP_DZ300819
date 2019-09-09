@@ -12,30 +12,26 @@ namespace levelUP_DZ300819
     {
         static void Main(string[] args)
         {
-            
-
-
+            Print();
 
             Console.ReadKey();
-            
         }
-
 
         static void DZ1() // подсчет 1 и 0 в байте 
         {
             Console.Write("Введите число: ");
             string myString = Console.ReadLine();
 
-            byte variableChech = 0;
+            byte variableByte;
 
-            bool checkParse = byte.TryParse(myString, out variableChech);
+            bool checkParse = byte.TryParse(myString, out variableByte);
 
             while (checkParse == false)
             {
                 Console.WriteLine("Введите число в диапазоне 0 - 255");
                 myString = Console.ReadLine();
 
-                if (checkParse = byte.TryParse(myString, out variableChech))
+                if (checkParse = byte.TryParse(myString, out variableByte))
                 {
                     break;
                 }
@@ -46,12 +42,16 @@ namespace levelUP_DZ300819
 
             }
 
+            Console.WriteLine($"Ваше число {variableByte}, НЕХ: {Convert.ToString(variableByte, 16)}");
+
             int count0 = 0;
             int count1 = 0;
 
-            for (int i = 0; i < 8; i++)
+            const int amountBitInByte = 7;
+
+            for (int i = 0; i <= amountBitInByte; i++)
             {
-                if ((variableChech & 0x01) == 1)
+                if ((variableByte & 0x01) == 1)
                 {
                     count1++;
                 }
@@ -59,10 +59,10 @@ namespace levelUP_DZ300819
                 {
                     count0++;
                 }
-                variableChech >>= 1;
+                variableByte >>= 1;
             }
 
-            Console.WriteLine($"Количество нулей в байте: {count0}\nколичество едениц: {count1}");
+            Console.WriteLine($"Количество нулей в байте: {count0}\nКоличество едениц в байте: {count1}");
         }
 
         static void DZ2() // умножение двух переменных использую битовый сдвиг
@@ -70,7 +70,8 @@ namespace levelUP_DZ300819
             Console.Write("Введите первое число:");
 
             string myyString = Console.ReadLine();
-            int firstNumber = 0;
+
+            int firstNumber;
 
             bool chek = int.TryParse(myyString, out firstNumber);
 
@@ -85,13 +86,12 @@ namespace levelUP_DZ300819
 
             }
 
-            Console.WriteLine($"Ваше первое число: {firstNumber}");
-
             Console.Write("Введите второе число:");
 
             myyString = Console.ReadLine();
 
-            int secondNumber = 0;
+            int secondNumber;
+
             chek = int.TryParse(myyString, out secondNumber);
 
             while (chek == false)
@@ -104,7 +104,6 @@ namespace levelUP_DZ300819
                 }
 
             }
-            Console.WriteLine($"Ваше второе число: {secondNumber}");
 
             int resMultiplication = firstNumber * secondNumber;
 
@@ -118,7 +117,7 @@ namespace levelUP_DZ300819
                 firstNumber <<= 1;
             }
 
-            Console.WriteLine($"{resBitShift}\n{resMultiplication}");
+            Console.WriteLine($"Результат умножения сдвигом: {resBitShift}\nРезультат стандартного умножения: {resMultiplication}");
         }
 
         static void DZ3() // расписание + пароль
@@ -135,12 +134,12 @@ namespace levelUP_DZ300819
 7- воскресенье
 некорректный ввод (символ) или выход за представленный диапазон (1-7) приводит к окончанию редактированию
 
-одиночный выбор дня недели устанавливает напоминание, повторный - снимает");
+одиночный выбор - устанавливает напоминание, повторный - снимает");
 
-            bool BB = true;
-            byte B = 0x0;
+            bool check = true;
+            byte scheduleInOneByte = 0x0;
 
-            schedule(BB, B);
+            schedule(check, scheduleInOneByte);
 
             Console.WriteLine("Для дальнейшего редактирования введите Пароль:");
 
@@ -152,72 +151,74 @@ namespace levelUP_DZ300819
             if (passwordEncod == usserEncod)
             {
                 Console.WriteLine("Пароль введен верно продолжайте редактирование");
-                schedule(BB, B);
+                schedule(check, scheduleInOneByte);
             }
             else
             {
-                Console.WriteLine("Паротль не верный!");
+                Console.WriteLine("Пароль не верный!");
             }
-
 
         }
 
-        static void schedule(bool BB, byte B) // функция редактирования расписания
+        static void schedule(bool check, byte scheduleInOneByte) // функция редактирования расписания
         {
 
-            while (BB == true)
+            while (check == true)
             {
 
-                Console.WriteLine("{0,8}", Convert.ToString(B, 2));
+                Console.WriteLine("{0,8}", Convert.ToString(scheduleInOneByte, 2));
 
                 int dayWeek;
-                BB = int.TryParse((Console.ReadLine()), out dayWeek);
+
+                check = int.TryParse((Console.ReadLine()), out dayWeek);
                 switch (dayWeek)
                 {
                     case 1: //понедельник
                         Console.Clear();
-                        B = (byte)(B ^ 0x80);
-
+                        scheduleInOneByte = (byte)(scheduleInOneByte ^ 0x80);
 
                         break;
+
                     case 2: //вторник
                         Console.Clear();
-                        B = (byte)(B ^ 0x40);
-
+                        scheduleInOneByte = (byte)(scheduleInOneByte ^ 0x40);
 
                         break;
+
                     case 3: //среда
                         Console.Clear();
-                        B = (byte)(B ^ 0x20);
+                        scheduleInOneByte = (byte)(scheduleInOneByte ^ 0x20);
 
                         break;
+
                     case 4: //четверг
                         Console.Clear();
-                        B = (byte)(B ^ 0x10);
+                        scheduleInOneByte = (byte)(scheduleInOneByte ^ 0x10);
 
                         break;
+
                     case 5: //пятница
                         Console.Clear();
-                        B = (byte)(B ^ 0x08);
+                        scheduleInOneByte = (byte)(scheduleInOneByte ^ 0x08);
 
                         break;
+
                     case 6: //суббота
                         Console.Clear();
-                        B = (byte)(B ^ 0x04);
+                        scheduleInOneByte = (byte)(scheduleInOneByte ^ 0x04);
 
                         break;
+
                     case 7: //воскресенье
                         Console.Clear();
-                        B = (byte)(B ^ 0x02);
-
-
+                        scheduleInOneByte = (byte)(scheduleInOneByte ^ 0x02);
 
                         break;
 
                     default:
-                        BB = false;
+                        check = false;
                         Console.Clear();
-                        Console.WriteLine("{0,8}", Convert.ToString(B, 2));
+                        Console.WriteLine("{0,8}", Convert.ToString(scheduleInOneByte, 2));
 
                         break;
 
@@ -225,14 +226,13 @@ namespace levelUP_DZ300819
 
             }
 
-
         }
 
         static void passwordEncrypt()   // создание файла пароля
         {
             string Pass = "Пароль";
 
-            FileStream file1 = new FileStream("C:\\Users\\Vitaliy\\Desktop\\mask.txt", FileMode.Open); //создаем файловый поток
+            FileStream file1 = new FileStream(@"C:\Users\Vitaliy\Desktop\mask.txt", FileMode.Open); //создаем файловый поток
             StreamReader readerMask = new StreamReader(file1); // создаем «потоковый читатель» и связываем его с файловым потоком
             string mask = readerMask.ReadToEnd(); //считываем все данные с потока
             readerMask.Close(); //закрываем поток
@@ -247,7 +247,7 @@ namespace levelUP_DZ300819
                 destination += ch_;
             }
 
-            FileStream file2 = new FileStream("C:\\Users\\Vitaliy\\Desktop\\passwordEncrypt.txt", FileMode.Create); //создаем файловый поток
+            FileStream file2 = new FileStream(@"C:\Users\Vitaliy\Desktop\passwordEncrypt.txt", FileMode.Create); //создаем файловый поток
             StreamWriter writerPasswordEncrypt = new StreamWriter(file2); //создаем «потоковый писатель» и связываем его с файловым потоком
             writerPasswordEncrypt.Write($"{destination}"); //записываем в файл
             writerPasswordEncrypt.Close();
@@ -257,9 +257,9 @@ namespace levelUP_DZ300819
         static string passwordEnc() // чтение файла
         {
             FileStream file = new FileStream("C:\\Users\\Vitaliy\\Desktop\\passwordEncrypt.txt", FileMode.Open); //создаем файловый поток
-            StreamReader readerMask = new StreamReader(file); // создаем «потоковый читатель» и связываем его с файловым потоком
-            string Pass = readerMask.ReadToEnd(); //считываем все данные с потока
-            readerMask.Close(); //закрываем поток
+            StreamReader readerPass = new StreamReader(file); // создаем «потоковый читатель» и связываем его с файловым потоком
+            string Pass = readerPass.ReadToEnd(); //считываем все данные с потока
+            readerPass.Close(); //закрываем поток
 
             return Pass;
 
@@ -286,6 +286,31 @@ namespace levelUP_DZ300819
             }
 
             return destination;
+
+        }
+
+        static void DZ4()
+        {
+
+        }
+
+        static void Print()
+        {
+
+            Console.WriteLine("Первое задание: Ввывести на экран количество единиц и нулей в байте");
+            DZ1();
+            Console.WriteLine("\nДля продолжения нажмите клавишу :)");
+            Console.ReadKey();
+
+            Console.Clear();
+            Console.WriteLine("Второе задание: Выполнить умножение двух целых числе используя битовый сдвиг");
+            DZ2();
+            Console.WriteLine("\nДля продолжения нажмите клавишу :)");
+            Console.ReadKey();
+
+            Console.Clear();
+            Console.WriteLine("Третье задание: Создать расписание с редактированием и паролем ");
+            DZ3();
 
         }
     }
